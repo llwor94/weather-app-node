@@ -1,6 +1,7 @@
 const yargs = require('yargs');
 
 const geocode = require('./geocode/geocode');
+const weather = require('./weather/weather');
 
 const argv = yargs
 	.options({
@@ -18,6 +19,17 @@ geocode.geocodeAddress(argv.address, (errorMessage, results) => {
 	if (errorMessage) {
 		console.log(errorMessage);
 	} else {
-		console.log(JSON.stringify(results, undefined, 2));
+		console.log(results.address);
+		weather.getWeather(results.lat, results.long, (errorMessage, weatherResults) => {
+			if (errorMessage) {
+				console.log(errorMessage);
+			} else {
+				console.log(
+					`It's currently ${weatherResults.temperature}. It feels like ${weatherResults.apparentTemperature}`,
+				);
+			}
+		});
 	}
 });
+
+//9a3d59d0aa28de9b80d42982e4546243
